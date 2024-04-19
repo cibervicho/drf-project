@@ -2,10 +2,16 @@ from rest_framework import serializers
 from watchlist_app.models import Movie
 
 
+# Validator for the description
+def description_validator(value):
+    if len(value) < 5:
+        raise serializers.ValidationError("Movie description must be at least 5 characters long")
+    return value
+
 class MovieSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(validators=[description_validator])
     active = serializers.BooleanField()
 
     def create(self, validated_data):
@@ -17,3 +23,17 @@ class MovieSerializer(serializers.Serializer):
         instance.active = validated_data.get('active', instance.active)
         instance.save()
         return instance
+
+
+    # Level-field validation
+    def validate_name(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError("Movie name must be at least 2 characters long")
+        return value
+
+    # Object-level validation
+    def validate(self, data):
+        if data["name"] == data["description"]:
+            raise serializers.ValidationError("Movie name must be different to it's description")
+        return data
+
