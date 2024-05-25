@@ -10,7 +10,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ('watchlist',)
 
 
-
 class WatchListSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
 

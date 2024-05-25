@@ -14,9 +14,9 @@ class ReviewCreate(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
-        movie = WatchList.objects.get(pk=pk)
+        watchlist = WatchList.objects.get(pk=pk)
 
-        serializer.save(watchlist=movie)
+        serializer.save(watchlist=watchlist)
 
 
 class ReviewList(generics.ListAPIView):
